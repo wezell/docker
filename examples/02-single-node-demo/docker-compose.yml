@@ -30,11 +30,14 @@ services:
   dotcms:
     image: dotcms/dotcms:latest
     environment:
-      "CMS_HEAP_SIZE": '1g'
-      "PROVIDER_DB_DNSNAME": 'db'
-      "PROVIDER_ELASTICSEARCH_ENDPOINTS": 'http://elasticsearch:9200'
-      "ES_ADMIN_PASSWORD": 'admin'
-      "CUSTOM_STARTER_URL": 'https://repo.dotcms.com/artifactory/libs-release-local/com/dotcms/starter/20210903/starter-20210903.zip'
+      "JAVA_OPTS_MEMORY": '-Xmx1g '
+      "DB_BASE_URL": "jdbc:postgresql://db/dotcms"
+      "DB_USERNAME": 'dotcmsdbuser'
+      "DB_PASSWORD": 'password'
+      "DOT_ES_ENDPOINTS": 'http://elasticsearch:9200'
+      "DOT_ES_AUTH_BASIC_USER": 'admin'
+      "DOT_ES_AUTH_BASIC_PASSWORD": 'admin'
+      # "CUSTOM_STARTER_URL": 'https://repo.dotcms.com/artifactory/libs-release-local/com/dotcms/starter/20210903/starter-20210903.zip'
     depends_on:
       - elasticsearch
       - db
@@ -49,7 +52,7 @@ services:
       - "8443:8443"
 
   db:
-    image: postgres:11
+    image: postgres:13
     command: postgres -c 'max_connections=400' -c 'shared_buffers=128MB'
     environment:
         "POSTGRES_USER": 'dotcmsdbuser'
